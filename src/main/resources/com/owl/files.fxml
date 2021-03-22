@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="437.0" prefWidth="732.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owl.controller.FilesController">
+   <children>
+      <TextArea fx:id="textArea" prefHeight="186.0" prefWidth="732.0" />
+      <TableView fx:id="table" layoutY="186.0" prefHeight="252.0" prefWidth="732.0">
+        <columns>
+          <TableColumn fx:id="nameColumn" prefWidth="295.0" text="Folder Name" />
+          <TableColumn fx:id="dateColumn" prefWidth="213.0" text="Date" />
+            <TableColumn fx:id="pathColumn" prefWidth="223.0" text="Path" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>
