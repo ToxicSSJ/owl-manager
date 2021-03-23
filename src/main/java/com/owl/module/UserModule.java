@@ -31,7 +31,7 @@ public class UserModule extends Module {
     @SneakyThrows
     public void start() {
 
-        Pair<Stage, UserController> loader = Main.load("primary", "console");
+        Pair<Stage, UserController> loader = Main.load("GuiUser", "console");
 
         stage = loader.getKey();
         controller = loader.getValue();
