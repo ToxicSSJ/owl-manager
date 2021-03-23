@@ -5,19 +5,18 @@ import com.owl.Main;
 import com.owl.controller.UserController;
 import com.owl.controller.data.ProcessData;
 import com.owl.sockets.SocketClient;
-import com.owl.sockets.packet.HelloPacket;
-import com.owl.sockets.packet.ListProcessPacket;
-import com.owl.sockets.packet.OpenApplicationPacket;
-import com.owl.sockets.packet.OpenedApplicationPacket;
-import com.owl.type.ApplicationType;
+import com.owl.sockets.packet.*;
+
 import com.owl.type.ModuleType;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Pair;
+import lombok.Data;
 import lombok.SneakyThrows;
 
 import java.util.LinkedList;
 
+@Data
 public class UserModule extends Module {
 
     private Stage stage;
@@ -50,15 +49,37 @@ public class UserModule extends Module {
     public void socket() {
 
         client.listen(HelloPacket.class, (packet) -> {
-            //controller.addInstruction("Modulo registrado por el Kernel!");
+            controller.addInstruction("Modulo registrado por el Kernel!");
         });
 
         client.listen(OpenedApplicationPacket.class, (packet) -> {
-
+            controller.addInstruction("Se esta abriendo la aplicación: (" + packet.getType().name() + ")!");
         });
 
-        //controller.addInstruction("Registrando modulo...");
+        client.listen(ListProcessPacket.class, (packet) -> {
+            controller.addInstruction("Se ha recibido la lista de procesos!");
+            controller.updateProcess(packet.getProcess());
+        });
+
+        client.listen(ListFolderPacket.class, (packet) -> {
+            controller.addInstruction("Se ha recibido la lista de carpetas!");
+            controller.updateFolders(packet.getFolders());
+        });
+
+        client.listen(CreatedFolderPacket.class, (packet) -> {
+            controller.addInstruction("Se ha creado una carpeta!");
+            controller.addFolder(packet.getData());
+        });
+
+        client.listen(KilledApplicationPacket.class, (packet) -> {
+            controller.addInstruction("Se está procesando la petición para cerrar el proceso (" + packet.getPid() + ")!");
+        });
+
+        controller.addInstruction("Registrando modulo...");
         client.send(HelloPacket.builder().module(ModuleType.USER_GUI_MODULE).build());
+
+        controller.addInstruction("Pidiendo lista de carpetas registradas...");
+        client.send(RequestListFolderPacket.builder().build());
 
     }
 

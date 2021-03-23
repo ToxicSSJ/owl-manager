@@ -5,11 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Builder
-public class CreatedFolderPacket extends Packet implements Serializable {
-
-    private FolderData data;
+public class RequestListFolderPacket extends Packet implements Serializable {
 
 }

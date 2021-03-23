@@ -5,7 +5,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 
-import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
 
 public class KernelController implements Controller {

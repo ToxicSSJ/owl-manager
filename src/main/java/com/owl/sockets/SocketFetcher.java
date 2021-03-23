@@ -62,11 +62,13 @@ public class SocketFetcher {
     public void send(Packet packet) {
         try {
 
-            output.writeObject(packet);
+            //output.writeObject(packet);
+            output.writeUnshared(packet);
             output.flush();
+            output.reset();
 
         } catch(Exception e) {
-
+            e.printStackTrace();
         }
     }
 

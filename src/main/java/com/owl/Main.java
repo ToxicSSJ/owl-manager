@@ -18,7 +18,7 @@ public class Main extends Application {
 
     private static Config config;
 
-    private LinkedList<Module> loadedModules;
+    private static LinkedList<Module> loadedModules;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -38,6 +38,16 @@ public class Main extends Application {
 
         for(Module module : loadedModules)
             module.socket();
+
+    }
+
+    public static <E extends Module> E getModule(ModuleType type) {
+
+        for(Module module : loadedModules)
+            if(module.getClass().isAssignableFrom(type.getClazz()))
+                return (E) module;
+
+        return null;
 
     }
 

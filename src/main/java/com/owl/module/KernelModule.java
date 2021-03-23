@@ -5,8 +5,8 @@ import com.owl.controller.KernelController;
 import com.owl.sockets.SocketFetcher;
 import com.owl.sockets.SocketServer;
 import com.owl.sockets.packet.*;
-import com.owl.type.ApplicationType;
 import com.owl.type.ModuleType;
+
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Pair;
@@ -53,23 +53,21 @@ public class KernelModule extends Module {
                     userClient = fetcher;
                     fetcher.setModule(ModuleType.USER_GUI_MODULE);
                     fetcher.send(HelloPacket.builder().module(ModuleType.KERNEL_MODULE).build());
-                    controller.addInstruction("Registered USER_GUI_MODULE (" + fetcher.getSocket().getRemoteSocketAddress().toString() + ")!");
+                    controller.addInstruction("Registrado USER_GUI_MODULE (" + fetcher.getSocket().getRemoteSocketAddress().toString() + ")!");
                     break;
 
                 case APPLICATION_MODULE:
                     appClient = fetcher;
                     fetcher.setModule(ModuleType.APPLICATION_MODULE);
                     fetcher.send(HelloPacket.builder().module(ModuleType.KERNEL_MODULE).build());
-                    controller.addInstruction("Registered APPLICATION_MODULE (" + fetcher.getSocket().getRemoteSocketAddress().toString() + ")!");
-
-                    appClient.send(OpenApplicationPacket.builder().type(ApplicationType.EXPLORER).build());
+                    controller.addInstruction("Registrado APPLICATION_MODULE (" + fetcher.getSocket().getRemoteSocketAddress().toString() + ")!");
                     break;
 
                 case FILES_MODULE:
                     filesClient = fetcher;
                     fetcher.setModule(ModuleType.FILES_MODULE);
                     fetcher.send(HelloPacket.builder().module(ModuleType.KERNEL_MODULE).build());
-                    controller.addInstruction("Registered FILES_MODULE (" + fetcher.getSocket().getRemoteSocketAddress().toString() + ")!");
+                    controller.addInstruction("Registrado FILES_MODULE (" + fetcher.getSocket().getRemoteSocketAddress().toString() + ")!");
                     break;
 
             }
@@ -77,8 +75,19 @@ public class KernelModule extends Module {
         });
 
         server.listen(CreateFolderPacket.class, ((fetcher, packet) -> remit(fetcher, filesClient, packet, filesNeeded())));
+        server.listen(RequestListFolderPacket.class, ((fetcher, packet) -> remit(fetcher, filesClient, packet, filesNeeded())));
+        server.listen(DeleteFolderPacket.class, ((fetcher, packet) -> remit(fetcher, filesClient, packet, filesNeeded())));
+
+        server.listen(OpenApplicationPacket.class, ((fetcher, packet) -> remit(fetcher, appClient, packet, applicationsNeeded())));
+        server.listen(KillApplicationPacket.class, ((fetcher, packet) -> remit(fetcher, appClient, packet, applicationsNeeded())));
+
+        server.listen(CreatedFolderPacket.class, ((fetcher, packet) -> remit(fetcher, userClient, packet, userNeeded())));
+        server.listen(DeletedFolderPacket.class, ((fetcher, packet) -> remit(fetcher, userClient, packet, userNeeded())));
         server.listen(OpenedApplicationPacket.class, ((fetcher, packet) -> remit(fetcher, userClient, packet, userNeeded())));
+        server.listen(KilledApplicationPacket.class, ((fetcher, packet) -> remit(fetcher, userClient, packet, userNeeded())));
+
         server.listen(ListProcessPacket.class, ((fetcher, packet) -> remit(fetcher, userClient, packet, userNeeded())));
+        server.listen(ListFolderPacket.class, ((fetcher, packet) -> remit(fetcher, userClient, packet, userNeeded())));
 
     }
 

@@ -4,10 +4,7 @@ import com.owl.Main;
 import com.owl.controller.ApplicationController;
 import com.owl.controller.data.ProcessData;
 import com.owl.sockets.SocketClient;
-import com.owl.sockets.packet.HelloPacket;
-import com.owl.sockets.packet.ListProcessPacket;
-import com.owl.sockets.packet.OpenApplicationPacket;
-import com.owl.sockets.packet.OpenedApplicationPacket;
+import com.owl.sockets.packet.*;
 import com.owl.type.ApplicationType;
 import com.owl.type.ModuleType;
 import javafx.stage.Stage;
@@ -15,6 +12,7 @@ import javafx.stage.StageStyle;
 import javafx.util.Pair;
 import lombok.SneakyThrows;
 import org.jutils.jprocesses.JProcesses;
+import org.jutils.jprocesses.model.JProcessesResponse;
 import org.jutils.jprocesses.model.ProcessInfo;
 
 import java.io.IOException;
@@ -103,6 +101,15 @@ public class ApplicationModule extends Module {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+        });
+
+        client.listen(KillApplicationPacket.class, (packet) -> {
+
+            JProcesses.killProcess(Integer.parseInt(packet.getPid()));
+
+            controller.addInstruction("Se ha enviado una petición de cerrado para el proceso con PID (" + packet.getPid() + ")!");
+            client.send(KilledApplicationPacket.builder().pid(packet.getPid()).build());
 
         });
 
