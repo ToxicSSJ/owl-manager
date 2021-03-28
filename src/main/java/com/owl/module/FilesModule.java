@@ -12,6 +12,7 @@ import com.owl.type.ApplicationType;
 import com.owl.type.ModuleType;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 
 import lombok.SneakyThrows;
@@ -50,6 +51,10 @@ public class FilesModule extends Module {
         stage.setTitle("Modulo Files (UI)");
 
         stage.show();
+
+        stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, windowEvent -> {
+
+        });
 
     }
 

@@ -7,8 +7,10 @@ import com.owl.sockets.SocketClient;
 import com.owl.sockets.packet.*;
 import com.owl.type.ApplicationType;
 import com.owl.type.ModuleType;
+import javafx.event.EventHandler;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 import lombok.SneakyThrows;
 import org.jutils.jprocesses.JProcesses;
@@ -43,6 +45,12 @@ public class ApplicationModule extends Module {
         stage.initStyle(StageStyle.UTILITY);
         stage.setResizable(false);
         stage.setTitle("Modulo Application (Console)");
+
+        stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, windowEvent -> {
+
+
+
+        });
 
         monitor = new Thread(new Runnable() {
 

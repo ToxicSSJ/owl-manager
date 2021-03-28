@@ -10,6 +10,7 @@ import com.owl.sockets.packet.*;
 import com.owl.type.ModuleType;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 import lombok.Data;
 import lombok.SneakyThrows;
@@ -42,6 +43,10 @@ public class UserModule extends Module {
         stage.setTitle("Modulo de Usuario (GUI)");
 
         stage.show();
+
+        stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, windowEvent -> {
+            System.exit(-1);
+        });
 
     }
 
