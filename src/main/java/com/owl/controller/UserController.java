@@ -226,7 +226,12 @@ public class UserController implements Controller {
         this.aplicacion.setText("Paint");
     }
 
-    public void setExplorador(ActionEvent actionEvent) {
-        this.aplicacion.setText("Explorador");
+    public void sendRequest() {
+        addInstruction("Petición de abrir modulo de aplicaciones enviada!");
+        send(OpenApplicationModulePacket.builder().build());
     }
+
+    /*public void setExplorador(ActionEvent actionEvent) {
+        this.aplicacion.setText("Explorador");
+    }*/
 }

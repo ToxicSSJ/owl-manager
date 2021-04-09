@@ -24,7 +24,7 @@
           <MenuItem mnemonicParsing="false" onAction="#setCalculadora" text="Calculadora" />
           <MenuItem mnemonicParsing="false" onAction="#setBloc" text="Bloc de notas" />
             <MenuItem mnemonicParsing="false" onAction="#setPaint" text="Paint" />
-            <MenuItem mnemonicParsing="false" onAction="#setExplorador" text="Explorador" />
+            <MenuItem disable="true" mnemonicParsing="false" text="Explorador" />
         </items>
       </MenuButton>
       <Text fill="#9ddfd3" layoutX="7.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aplicaciones">
@@ -56,6 +56,7 @@
       <Text fx:id="Mensaje2" fill="#ffc93c" layoutX="7.0" layoutY="449.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="628.0" />
       <Text fx:id="Mensaje" fill="#ffc93c" layoutX="7.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="628.0" />
       <TextArea fx:id="textArea" layoutX="7.0" layoutY="678.0" prefHeight="169.0" prefWidth="866.0" />
+      <Button layoutX="135.0" layoutY="56.0" mnemonicParsing="false" onAction="#sendRequest" style="-fx-background-color: lime;" text="Ejecutar" />
       
    </children>
 </AnchorPane>

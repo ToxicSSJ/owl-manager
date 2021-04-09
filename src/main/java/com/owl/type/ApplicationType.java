@@ -10,7 +10,7 @@ public enum ApplicationType implements Serializable {
     CALCULATOR("calc", "Calculator.exe", "Calculadora"),
     NOTEPAD("notepad", "notepad.exe", "Bloc de notas"),
     PAINT("mspaint", "mspaint.exe", "Paint"),
-    EXPLORER("explorer.exe", "explorer.exe", "Explorador"),
+    // EXPLORER("explorer.exe", "explorer.exe", "Explorador"),
 
     ;
 

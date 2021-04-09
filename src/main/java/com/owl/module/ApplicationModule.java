@@ -7,14 +7,13 @@ import com.owl.sockets.SocketClient;
 import com.owl.sockets.packet.*;
 import com.owl.type.ApplicationType;
 import com.owl.type.ModuleType;
-import javafx.event.EventHandler;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 import lombok.SneakyThrows;
 import org.jutils.jprocesses.JProcesses;
-import org.jutils.jprocesses.model.JProcessesResponse;
 import org.jutils.jprocesses.model.ProcessInfo;
 
 import java.io.IOException;
@@ -30,12 +29,15 @@ public class ApplicationModule extends Module {
     private Thread monitor;
 
     private LinkedList<ProcessData> data;
+    private Pair<Stage, ApplicationController> loader;
+
+    private boolean closed = false;
 
     @Override
     @SneakyThrows
     public void start() {
 
-        Pair<Stage, ApplicationController> loader = Main.load("application", "console");
+        loader = Main.load("application", "console");
 
         stage = loader.getKey();
         controller = loader.getValue();
@@ -48,7 +50,10 @@ public class ApplicationModule extends Module {
 
         stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, windowEvent -> {
 
+            for(ProcessData info : data)
+                JProcesses.killProcess(Integer.parseInt(info.getPid()));
 
+            closed = true;
 
         });
 
@@ -62,8 +67,8 @@ public class ApplicationModule extends Module {
 
                     Thread.sleep(1000);
 
-                    data.clear();
                     List<ProcessInfo> processes = JProcesses.getProcessList();
+                    data.clear();
 
                     for(ProcessInfo process : processes)
                         for(ApplicationType type : ApplicationType.values())
@@ -97,7 +102,50 @@ public class ApplicationModule extends Module {
             controller.addInstruction("Modulo registrado por el Kernel!");
         });
 
+        client.listen(OpenApplicationModulePacket.class, (packet) -> {
+
+            if(!closed) {
+
+                controller.addInstruction("El modulo ya ha sido abierto!");
+                return;
+
+            }
+
+            Platform.runLater(() -> {
+                try {
+
+                    loader = Main.load("application", "console");
+
+
+                    stage = loader.getKey();
+                    controller = loader.getValue();
+
+                    stage.initStyle(StageStyle.UTILITY);
+                    stage.setResizable(false);
+                    stage.setTitle("Modulo Application (Console)");
+
+                    stage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, windowEvent -> {
+
+                        for(ProcessData info : data)
+                            JProcesses.killProcess(Integer.parseInt(info.getPid()));
+
+                        closed = true;
+
+                    });
+
+                    stage.show();
+                    closed = false;
+
+                } catch (Exception e) {}
+
+            });
+
+        });
+
         client.listen(OpenApplicationPacket.class, (packet) -> {
+
+            if(closed)
+                return;
 
             try {
 
@@ -113,6 +161,9 @@ public class ApplicationModule extends Module {
         });
 
         client.listen(KillApplicationPacket.class, (packet) -> {
+
+            if(closed)
+                return;
 
             JProcesses.killProcess(Integer.parseInt(packet.getPid()));
 

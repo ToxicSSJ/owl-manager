@@ -85,10 +85,12 @@ public class KernelModule extends Module {
 
         server.listen(OpenApplicationPacket.class, ((fetcher, packet) -> remit(fetcher, appClient, packet, applicationsNeeded())));
         server.listen(KillApplicationPacket.class, ((fetcher, packet) -> remit(fetcher, appClient, packet, applicationsNeeded())));
+        server.listen(OpenApplicationModulePacket.class, ((fetcher, packet) -> remit(fetcher, appClient, packet, applicationsNeeded())));
 
         server.listen(CreatedFolderPacket.class, ((fetcher, packet) -> remit(fetcher, userClient, packet, userNeeded())));
         server.listen(DeletedFolderPacket.class, ((fetcher, packet) -> remit(fetcher, userClient, packet, userNeeded())));
         server.listen(OpenedApplicationPacket.class, ((fetcher, packet) -> remit(fetcher, userClient, packet, userNeeded())));
+        server.listen(OpenedApplicationModulePacket.class, ((fetcher, packet) -> remit(fetcher, userClient, packet, userNeeded())));
         server.listen(KilledApplicationPacket.class, ((fetcher, packet) -> remit(fetcher, userClient, packet, userNeeded())));
 
         server.listen(ListProcessPacket.class, ((fetcher, packet) -> remit(fetcher, userClient, packet, userNeeded())));

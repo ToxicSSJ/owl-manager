@@ -18,7 +18,6 @@ public class SocketServer {
 
     private SocketServer instance;
 
-    private String url;
     private int port;
 
     private ServerSocket socket;
@@ -34,7 +33,6 @@ public class SocketServer {
 
         this.instance = this;
 
-        this.url = url;
         this.port = port;
 
         this.clients = new LinkedList<>();
